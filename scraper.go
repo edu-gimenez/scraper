@@ -150,8 +150,8 @@ func worker(ctx context.Context, sources []ds.DS, xmlOpts *rom.XMLOpts, gameOpts
 				if err == ds.ErrNotFound {
 					break
 				} else {
-					log.Printf(time.Duration(sleepFactor * (try + 1)) * time.Second)
-					time.Sleep(time.Duration(sleepFactor * (try + 1)) * time.Second)
+					log.Printf(time.Duration(*sleepFactor * (try + 1)) * time.Second)
+					time.Sleep(time.Duration(*sleepFactor * (try + 1)) * time.Second)
 					continue
 				}
 			}
@@ -161,8 +161,8 @@ func worker(ctx context.Context, sources []ds.DS, xmlOpts *rom.XMLOpts, gameOpts
 			xml, err := r.XML(ctx, xmlOpts)
 			if err != nil {
 				log.Printf("ERR: error processing %s: %s", r.Path, err)
-				log.Printf(time.Duration(sleepFactor * (try + 1)) * time.Second)
-				time.Sleep(time.Duration(sleepFactor * (try + 1)) * time.Second)
+				log.Printf(time.Duration(*sleepFactor * (try + 1)) * time.Second)
+				time.Sleep(time.Duration(*sleepFactor * (try + 1)) * time.Second)
 				res.Err = err
 				continue
 			}
