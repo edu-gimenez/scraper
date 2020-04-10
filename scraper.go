@@ -151,7 +151,7 @@ func worker(ctx context.Context, sources []ds.DS, xmlOpts *rom.XMLOpts, gameOpts
 					break
 				} else {
 					log.Printf("Sleeping %s seconds", sleepFactor * retries);
-					time.Sleep(sleepFactor * retries);
+					time.Sleep(sleepFactor * retries * time.Second);
 					continue
 				}
 			}
@@ -162,7 +162,7 @@ func worker(ctx context.Context, sources []ds.DS, xmlOpts *rom.XMLOpts, gameOpts
 			if err != nil {
 				log.Printf("ERR: error processing %s: %s", r.Path, err)
 				log.Printf("Sleeping %s seconds", sleepFactor * retries);
-				time.Sleep(sleepFactor * retries);
+				time.Sleep(sleepFactor * retries * time.Second);
 				res.Err = err
 				continue
 			}
