@@ -45,7 +45,8 @@ var maxWidth = flag.Uint("max_width", 400, "The max `width` of images. Larger im
 var maxHeight = flag.Uint("max_height", 0, "The max `height` of images. Larger images will be resized.")
 var workers = flag.Int("workers", 1, "Use `N` worker threads to process roms.")
 var imgWorkers = flag.Int("img_workers", 0, "Use `N` worker threads to process images. If 0, then use the same value as workers.")
-var retries = flag.Int("retries", 2, "Retry a rom `N` times on an error.")
+var retries = flag.Int("retries", 2, "Retry a rom `N` times zon an error.")
+var sleepFactor = flag.Int("sleep_factor", 2, "Sleep `N` * retry number seconds in error case.")
 var thumbOnly = flag.Bool("thumb_only", false, "Download the thumbnail for both the image and thumb (faster).")
 var noThumb = flag.Bool("no_thumb", false, "Don't add thumbnails to the gamelist.")
 var skipCheck = flag.Bool("skip_check", false, "Skip the check if thegamesdb.net is up.")
@@ -149,8 +150,8 @@ func worker(ctx context.Context, sources []ds.DS, xmlOpts *rom.XMLOpts, gameOpts
 				if err == ds.ErrNotFound {
 					break
 				} else {
-					log.Printf("Sleeping %s seconds", 2 * retries);
-					time.Sleep(2 * retries);
+					log.Printf("Sleeping %s seconds", sleepFactor * retries);
+					time.Sleep(sleepFactor * retries);
 					continue
 				}
 			}
@@ -160,8 +161,8 @@ func worker(ctx context.Context, sources []ds.DS, xmlOpts *rom.XMLOpts, gameOpts
 			xml, err := r.XML(ctx, xmlOpts)
 			if err != nil {
 				log.Printf("ERR: error processing %s: %s", r.Path, err)
-				log.Printf("Sleeping %s seconds", 2 * retries);
-				time.Sleep(2 * retries);
+				log.Printf("Sleeping %s seconds", sleepFactor * retries);
+				time.Sleep(sleepFactor * retries);
 				res.Err = err
 				continue
 			}
