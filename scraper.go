@@ -14,6 +14,7 @@ import (
 	"os/signal"
 	"path/filepath"
 	"runtime"
+	"time"
 	"strings"
 	"sync"
 
@@ -148,6 +149,8 @@ func worker(ctx context.Context, sources []ds.DS, xmlOpts *rom.XMLOpts, gameOpts
 				if err == ds.ErrNotFound {
 					break
 				} else {
+					log.Printf("Sleeping %s seconds", 2 * retries);
+					time.Sleep(2 * retries);
 					continue
 				}
 			}
@@ -157,6 +160,8 @@ func worker(ctx context.Context, sources []ds.DS, xmlOpts *rom.XMLOpts, gameOpts
 			xml, err := r.XML(ctx, xmlOpts)
 			if err != nil {
 				log.Printf("ERR: error processing %s: %s", r.Path, err)
+				log.Printf("Sleeping %s seconds", 2 * retries);
+				time.Sleep(2 * retries);
 				res.Err = err
 				continue
 			}
