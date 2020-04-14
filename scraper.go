@@ -138,7 +138,7 @@ func worker(ctx context.Context, sources []ds.DS, xmlOpts *rom.XMLOpts, gameOpts
 	var count = 0;
 	for r := range roms {
 		if count++; count > *limit {
-			log.Printf("INFO: Limit %s reach", count)
+			log.Printf("INFO: Limit %d reach", count)
 			break
 		}	
 		if done(ctx) {
