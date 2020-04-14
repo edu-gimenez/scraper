@@ -79,6 +79,7 @@ var ssUser = flag.String("ss_user", "", "The `username` for registered ScreenScr
 var ssPassword = flag.String("ss_password", "", "The `password` for registered ScreenScraper users.")
 var gdbAPIkey = flag.String("gdb_apikey", "", "The gamesdb apikey received by https://forums.thegamesdb.net/viewforum.php?f=10")
 var updateCache = flag.Bool("update_cache", true, "If false, don't check for updates on locally cached files.")
+var limit = flag.Int("limit", 0, "If set it will finish the process when `N` roms are processed")
 
 var errUserCanceled = errors.New("user canceled")
 
@@ -134,7 +135,12 @@ func done(ctx context.Context) bool {
 // worker is a function to process roms from a channel.
 func worker(ctx context.Context, sources []ds.DS, xmlOpts *rom.XMLOpts, gameOpts *rom.GameOpts, results chan result, roms chan *rom.ROM, wg *sync.WaitGroup) {
 	defer wg.Done()
+	var count = 0;
 	for r := range roms {
+		if count++; count > *limit {
+			log.Printf("INFO: Limit %s reach", count)
+			break
+		}	
 		if done(ctx) {
 			break
 		}
